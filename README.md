@@ -160,6 +160,7 @@ If you encounter any issues:
 
 **Last Updated:** December 2025  
 **Version:** 0.5
-**Status:** Complete and fully functional
+**Status:** Guide: Complete and functional
+**Known bugs:** Sidebar won't collapse, video won't play in new window. 
 
 **Made with ❤️ for the Call of Duty Zombies community**
