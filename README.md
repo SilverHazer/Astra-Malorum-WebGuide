@@ -1,6 +1,9 @@
 # 🧟 Astra Malorum Easter Egg - Complete Interactive Guide
 A comprehensive, professional-grade interactive web guide for completing the **Astra Malorum Easter Egg** in **Call of Duty: Black Ops 7 Zombies**. Built with modern web technologies for smooth navigation, seamless video integration, and an optimized user experience.
 
+**Live version:**
+https://htmlpreview.github.io/?https://github.com/SilverHazer/Astra-Malorum-WebGuide/blob/main/Astra%20Malorum%20Easter%20Egg.html
+
 ## ✨ Features
 
 ### 📱 Responsive Design
@@ -159,8 +162,8 @@ If you encounter any issues:
 ---
 
 **Last Updated:** December 2025  
-**Version:** 0.5
-**Status:** Guide: Complete and functional
-**Known bugs:** Sidebar won't collapse, video won't play in new window. 
+**Version:** 1.0
+**Status:** Guide: Complete and functional!
+**Known bugs:** Sidebar won't collapse
 
 **Made with ❤️ for the Call of Duty Zombies community**
