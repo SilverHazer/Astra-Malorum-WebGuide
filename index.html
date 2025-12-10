@@ -1,0 +1,2347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astra Malorum Easter Egg - Complete Guide (Final v1)</title>
+    <style>
+        :root {
+            --color-primary: #1a1a2e;
+            --color-secondary: #16213e;
+            --color-accent: #6366f1;
+            --color-light: #0f0f1e;
+            --color-text: #e4e6eb;
+            --color-border: #2a2a3e;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-indigo: #6366f1;
+            --color-indigo-light: #818cf8;
+            --color-indigo-dark: #4f46e5;
+            --color-dark-bg: #0f0f1e;
+            --color-dark-surface: #1a1a2e;
+            --color-dark-card: #2a2a3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--color-dark-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: var(--color-dark-surface);
+            color: var(--color-text);
+            padding: 20px;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            border-right: 1px solid var(--color-border);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-300px);
+        }
+
+        .sidebar-toggle-btn {
+            position: fixed;
+            left: 300px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 48px;
+            background: var(--color-dark-surface);
+            border: 1px solid var(--color-border);
+            border-left: none;
+            border-radius: 0 8px 8px 0;
+            color: var(--color-indigo-light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+        }
+
+        .sidebar-toggle-btn:hover {
+            background: var(--color-dark-card);
+            color: white;
+        }
+
+        .sidebar.collapsed + .sidebar-toggle-btn {
+            left: 0;
+        }
+
+        .sidebar h1 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f1f3a 100%);
+            color: white;
+            text-align: left;
+            border-bottom: 2px solid #1e3a5f;
+            padding: 12px;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+
+        .sidebar-content {
+            margin-top: 20px;
+        }
+
+        .toc-section {
+            margin-bottom: 15px;
+        }
+
+        .toc-section h3 {
+            font-size: 13px;
+            color: #32b8c6;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .toc-links {
+            list-style: none;
+        }
+
+        .toc-links li {
+            margin-bottom: 5px;
+        }
+
+        .toc-links a {
+            color: var(--color-text);
+            text-decoration: none;
+            font-size: 12px;
+            padding: 5px 8px;
+            border-radius: 3px;
+            display: block;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .toc-links a:hover {
+            background: var(--color-dark-card);
+            padding-left: 12px;
+            color: var(--color-indigo-light);
+        }
+
+        .toc-links a.active {
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f1f3a 100%);
+            color: white;
+            font-weight: bold;
+        }
+
+        .main-content {
+            margin-left: 300px;
+            padding: 40px;
+            background: var(--color-dark-bg);
+            flex: 1;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 100vh;
+        }
+
+        .sidebar.collapsed ~ .main-content {
+            margin-left: 0;
+            max-width: 100%;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f1f3a 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 15px;
+            opacity: 0.95;
+        }
+
+        .content-section {
+            display: none;
+            background: var(--color-dark-card);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border-left: 4px solid #1e3a5f;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-section h2 {
+            color: #32b8c6;
+            font-size: 26px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #1e3a5f;
+            padding-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .content-section h3 {
+            color: #32b8c6;
+            font-size: 18px;
+            margin-top: 24px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .video-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f1f3a 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #32b8c6;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .video-link:hover {
+            background: linear-gradient(135deg, #0f1f3a 0%, #051424 100%);
+            color: #32b8c6;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(50, 184, 198, 0.3);
+        }
+
+        .step-box {
+            background: rgba(30, 58, 95, 0.15);
+            border-left: 4px solid #1e3a5f;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            color: var(--color-text);
+        }
+
+        .step-content {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: flex-start;
+        }
+        
+        .step-content:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            background: var(--color-indigo);
+            color: white;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+            min-width: 32px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .tip {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--color-success);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            color: var(--color-text);
+        }
+
+        .warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--color-warning);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            color: var(--color-text);
+        }
+
+        .dropdown-header {
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f1f3a 100%);
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            user-select: none;
+            margin-top: 15px;
+        }
+
+        .dropdown-header:hover {
+            background: linear-gradient(135deg, #0f1f3a 0%, #051424 100%);
+        }
+
+        .dropdown-content {
+            background: var(--color-dark-surface);
+            padding: 20px;
+            display: none;
+            border-radius: 0 0 8px 8px;
+            margin-top: -4px;
+            border: 1px solid var(--color-border);
+            border-top: none;
+            color: var(--color-text);
+        }
+
+        .dropdown-content.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+        }
+
+        table th {
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f1f3a 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--color-border);
+            color: var(--color-text);
+            font-size: 14px;
+            background: var(--color-dark-surface);
+        }
+        
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        table tr:nth-child(even) td {
+            background: rgba(30, 58, 95, 0.15);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .btn-secondary {
+            background: var(--color-dark-card);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-dark-surface);
+            transform: translateY(-2px);
+            border-color: var(--color-indigo);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .efficiency-badge {
+            display: inline-block;
+            background: rgba(30, 58, 95, 0.4);
+            color: #32b8c6;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin: 5px 10px 5px 0;
+            font-weight: 700;
+            border: 1px solid rgba(50, 184, 198, 0.3);
+        }
+
+        ul {
+            margin: 15px 0;
+            margin-left: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+        
+        a {
+            color: #32b8c6;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        strong {
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-300px);
+                position: fixed;
+                z-index: 2000;
+                box-shadow: 4px 0 16px rgba(0,0,0,0.5);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .sidebar.collapsed {
+                transform: translateX(-300px);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .sidebar-toggle-btn {
+                left: 0;
+                top: 80px;
+                border-radius: 0 8px 8px 0;
+                background: #1e3a5f;
+                color: white;
+            }
+            
+            .sidebar.active + .sidebar-toggle-btn {
+                left: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="sidebar-toggle-btn" onclick="toggleSidebar()" aria-label="Toggle Sidebar">‹</button>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h1>CONTENTS</h1>
+            <div class="sidebar-content">
+                <div class="toc-section">
+                    <h3>PREPARATION</h3>
+                    <ul class="toc-links">
+                        <li><a data-section="intro">Introduction</a></li>
+                        <li><a data-section="loadout">Recommended Loadout</a></li>
+                        <li><a data-section="pap-secrets">Pack-a-Punch Secrets</a></li>
+                        <li><a data-section="efficiency">Efficiency Tips</a></li>
+                    </ul>
+                </div>
+
+                <div class="toc-section">
+                    <h3>MAIN STEPS</h3>
+                    <ul class="toc-links">
+                        <li><a data-section="step1">Step 1-3: Power & Pack-a-Punch</a></li>
+                        <li><a data-section="step2">Step 4: Oscar Components</a></li>
+                        <li><a data-section="step3">Step 5: Oscar 3x Kills</a></li>
+                        <li><a data-section="step4">Step 6: Wonder Weapon</a></li>
+                        <li><a data-section="step5">Step 7: Audio & Planets</a></li>
+                        <li><a data-section="step6">Step 8: Mars Code</a></li>
+                        <li><a data-section="step7">Step 9-11: Brain Extract</a></li>
+                        <li><a data-section="step8">Step 12: Library Busts</a></li>
+                        <li><a data-section="step9">Step 13: Planet Align</a></li>
+                        <li><a data-section="step10">Step 14: UFO Defense</a></li>
+                        <li><a data-section="step11">Step 16-17: Mars Sequence</a></li>
+                        <li><a data-section="step12">Step 18: Symbols & Pillars</a></li>
+                    </ul>
+                </div>
+
+                <div class="toc-section">
+                    <h3>BOSS FIGHT</h3>
+                    <ul class="toc-links">
+                        <li><a data-section="boss-prep">Boss Preparation</a></li>
+                        <li><a data-section="boss-fight">Boss Fight Phases</a></li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="header">
+                <h1>🧟 Astra Malorum Easter Egg</h1>
+                <p>Complete & Efficient Guide | Black Ops 7 Zombies | Final v1</p>
+            </div>
+
+            <!-- INTRODUCTION -->
+            <div id="intro" class="content-section active">
+                <h2>Welcome to the Guide</h2>
+                <p>This comprehensive guide will walk you step-by-step through the Astra Malorum Easter Egg. With all efficiency tips integrated, you can complete this in <strong>13-15 rounds</strong>.</p>
+                
+                <a href="https://www.youtube.com/watch?v=MxgEVlnU85s&t=0" target="_blank" class="video-link">▶ Click here for video instructions</a>
+                
+                <div class="tip">
+                    <strong>💡 Pro Tip:</strong> Turn on captions - it helps enormously when following Oscar's audio recordings!
+                </div>
+                <p style="margin-top: 20px;"><strong>What This Guide Covers:</strong></p>
+                <ul>
+                    <li>Power activation and Pack-a-Punch setup</li>
+                    <li><strong>NEW:</strong> Secret Pack-a-Punch weapons & tier system</li>
+                    <li>Oscar component gathering and 3x kills</li>
+                    <li>Wonder Weapon acquisition</li>
+                    <li>Planet audio code and Mars declination</li>
+                    <li>Brain extraction and installation</li>
+                    <li>Library busts puzzle</li>
+                    <li>Planet direction alignment</li>
+                    <li>Mars bird and symbol sequences</li>
+                    <li>Complete boss fight walkthrough</li>
+                </ul>
+                
+                <h3>Sources & Credits</h3>
+                <p>This guide is based on the incredible work of the Zombies community. Special thanks to:</p>
+                <ul>
+                    <li><strong>MxgEVlnU85s</strong> - Comprehensive step-by-step walkthrough</li>
+                    <li><strong>KR4SG1V8nf0</strong> - Efficiency tips & strategies</li>
+                    <li><strong>rIL2JBEQCbI</strong> - Additional reference</li>
+                    <li><strong>5F0taaTkaLs</strong> - Community insights</li>
+                    <li><strong>CrashPower</strong> - Glitch discoveries</li>
+                    <li><strong>Sulky118</strong> - High round strategies</li>
+                </ul>
+            </div>
+
+            <!-- LOADOUT -->
+            <div id="loadout" class="content-section">
+                <h2>Recommended Loadout</h2>
+                
+                <a href="https://www.youtube.com/watch?v=MxgEVlnU85s&t=0" target="_blank" class="video-link">▶ Click here for video instructions</a>
+                
+                <h3>Primary Weapons</h3>
+                <div class="step-box">
+                    <strong>Nova Line (best early) or Maddox Assault Rifle</strong><br>
+                    Pack-a-punch this weapon ASAP - many steps depend on it.
+                </div>
+
+                <h3>Secondary Weapons</h3>
+                <ul>
+                    <li><strong>LMG's:</strong> For boss fight armor (massive damage output)</li>
+                    <li><strong>Ion Sniper:</strong> Special for armor stripping (not as primary)</li>
+                </ul>
+
+                <h3>Ammo Mods</h3>
+                <div class="step-box">
+                    <strong>Cryofreeze:</strong> ESSENTIAL for crystal step - have this available!<br><br>
+                    <strong>Shatter Blast:</strong> Essential for boss fight armor damage
+                </div>
+
+                <h3>Augments</h3>
+                <table>
+                    <tr>
+                        <th>Augment</th>
+                        <th>Upgrade 1</th>
+                        <th>Upgrade 2</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Toxic Growth</strong></td>
+                        <td>Pollination</td>
+                        <td>Green Thumb</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Wisp Tea</strong></td>
+                        <td>Zombie Sitter</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Frenzied Guard</strong></td>
+                        <td>Frenzy Fire</td>
+                        <td>Extension</td>
+                    </tr>
+                </table>
+
+                <h3>Gobble Gums</h3>
+                <ul>
+                    <li><strong>Spin:</strong> Extra gobble spins</li>
+                    <li><strong>Near-Death Experience:</strong> For easier mode / unlimited revives</li>
+                    <li><strong>Cashback:</strong> Points back on purchase</li>
+                    <li><strong>Shields Up:</strong> Useful for boss fight survival</li>
+                </ul>
+            </div>
+
+            <!-- PACK-A-PUNCH SECRETS (NEW SECTION) -->
+            <div id="pap-secrets" class="content-section">
+                <h2>Pack-a-Punch Secret Weapons Guide</h2>
+                
+                <a href="https://www.youtube.com/watch?v=RNuG-9p910Q&t=0" target="_blank" class="video-link">▶ Click here for Pack-a-Punch Tier Guide</a>
+
+                <h3>Overview</h3>
+                <p>Pack-a-Punch (PAP) in Astra Malorum reveals secret abilities and transformations for all weapons. Some weapons get unique pack-a-punch names and special mechanics that dramatically change how they perform.</p>
+
+                <h3>Top Secret Pack-a-Punch Weapons</h3>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">🔫 1. Jerry Pistol (Transformation) <span>▼</span></div>
+                    <div class="dropdown-content">
+                        <strong>Upgraded from standard pistol:</strong>
+                        <ul>
+                            <li>Completely transforms into a fully automatic weapon</li>
+                            <li>No need to ADS (aim down sights)</li>
+                            <li>Can be dual-wielded for massive damage output</li>
+                            <li>✅ <strong>Best for:</strong> Speedrunning and training zombies</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">💣 2. Ballist Artillery (Mortar Upgrade) <span>▼</span></div>
+                    <div class="dropdown-content">
+                        <strong>Upgraded from Mortar Launcher:</strong>
+                        <ul>
+                            <li>Becomes a full artillery/mortar launcher</li>
+                            <li>Massive AoE damage with trajectory compensation</li>
+                            <li>Added ADS zoom for precision aiming</li>
+                            <li>⚠️ <strong>Warning:</strong> Friendly fire can damage you with the blast</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">⚡ 3. Spartan Laser Beam <span>▼</span></div>
+                    <div class="dropdown-content">
+                        <strong>Charged Energy Weapon:</strong>
+                        <ul>
+                            <li>Continuously fires without reloading after PAP</li>
+                            <li>Shoots 24 rounds in a beam sequence</li>
+                            <li>Insane damage output for high-round play</li>
+                            <li>⏱️ <strong>Note:</strong> Slow fire rate but devastating impact</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Hidden Weapon Transformations</h3>
+                <table>
+                    <tr>
+                        <th>Base Weapon</th>
+                        <th>PAP Name</th>
+                        <th>Special Ability</th>
+                    </tr>
+                    <tr>
+                        <td>Ray Gun Mark 2</td>
+                        <td>Porter's Mark 2</td>
+                        <td>Classic 3-round burst (buffed damage)</td>
+                    </tr>
+                    <tr>
+                        <td>XR3 Ion</td>
+                        <td>Pandemonium OG</td>
+                        <td>Chain lightning effect on crits</td>
+                    </tr>
+                    <tr>
+                        <td>Warden Sniper</td>
+                        <td>ET2 Brutus</td>
+                        <td>Mob of the Dead reference (huge armor dmg)</td>
+                    </tr>
+                    <tr>
+                        <td>VSera Sniper</td>
+                        <td>Reconfigurator</td>
+                        <td>Double ammo + tight hipfire spread</td>
+                    </tr>
+                    <tr>
+                        <td>Jagger Pistol</td>
+                        <td>Jagger SMG</td>
+                        <td>Transforms pistol into rapid-fire SMG</td>
+                    </tr>
+                </table>
+
+                <h3>Glitches & Exploits (Use with Caution)</h3>
+                <div class="warning">
+                    <strong>⚠️ Note:</strong> These exploits may be patched in future updates. Check patch notes before attempting.
+                </div>
+
+                <div class="step-box">
+                    <strong>1. Pack-a-Punch Ammo Duplication</strong><br>
+                    Stack ammo crates in specific locations, then PAP certain weapons to overflow ammo reserves past maximum cap.
+                </div>
+
+                <div class="step-box">
+                    <strong>2. Weapon Clipping Glitch</strong><br>
+                    Use certain PAP weapons (like Ballist Artillery) to clip through map geometry in Stargazer's Courtyard, allowing access to unintended safe spots.
+                </div>
+
+                <div class="step-box">
+                    <strong>3. Frenzy Guard Stacking</strong><br>
+                    Combine PAP with Frenzy Guard + Frenzy Fire augment. This stacks damage multipliers exponentially, making even basic weapons one-shot kills on high rounds.
+                </div>
+
+                <h3>Tier 4 Pack-a-Punch (Cursed Mode)</h3>
+                <div class="tip">
+                    <strong>🏆 Ultimate Upgrade:</strong> Collect all 6 Relics (3 Tier 1, 2 Tier 2, 1 Tier 3) and spend <strong>100,000 points</strong> at Pack-a-Punch to unlock Cursed Mode.
+                </div>
+                <ul>
+                    <li>Exclusive ultra-rare camo unlocked</li>
+                    <li>Maximum weapon damage boost (beyond Tier 3)</li>
+                    <li>Unique visual effects and animations</li>
+                    <li>Guaranteed better performance in high rounds (50+)</li>
+                </ul>
+            </div>
+
+            <!-- EFFICIENCY TIPS -->
+            <div id="efficiency" class="content-section">
+                <h2>Efficiency Tips & Tricks</h2>
+                
+                <a href="https://www.youtube.com/watch?v=KR4SG1V8nf0&t=0" target="_blank" class="video-link">▶ Click here for video instructions</a>
+                
+                <div class="efficiency-badge">Saves 5-10 rounds</div>
+                <h3>1. Oscar Spawn Manipulation</h3>
+                <p>Instead of waiting randomly for Oscar:</p>
+                <ul>
+                    <li>First Oscar spawns IMMEDIATELY after Pack-a-Punch activation</li>
+                    <li>Next Oscars spawn automatically in set rounds (around 7-8, 10-11, etc.)</li>
+                    <li><strong>Trick:</strong> Kill yourself and respawn if you miss Oscar!</li>
+                    <li><strong>New Trick:</strong> Fail the sun trap 4/5 times to force spawn Oscar immediately</li>
+                </ul>
+
+                <div class="efficiency-badge">Saves 3-5 minutes</div>
+                <h3>2. Zombie Sitter Augment Exploit</h3>
+                <div class="step-box">
+                    <strong>For Oscar Audio Step:</strong><br><br>
+                    Buy Wisp Tea perk with Zombie Sitter. Shoot one zombie - Wisp will tend this zombie continuously. You get <strong>10 full minutes</strong> to follow Oscar without worries!
+                </div>
+
+                <div class="efficiency-badge">Saves 7 rounds</div>
+                <h3>3. Free Perks from Vinyl Records</h3>
+                <p>Collect these in order:</p>
+                <table>
+                    <tr>
+                        <th>Round</th>
+                        <th>Record Location</th>
+                        <th>Kill Type</th>
+                        <th>Reward</th>
+                    </tr>
+                    <tr>
+                        <td>2-3</td>
+                        <td>Museum Infinitum</td>
+                        <td>Melee kills</td>
+                        <td>250 salvage + Perk</td>
+                    </tr>
+                    <tr>
+                        <td>4-5</td>
+                        <td>Machina Astralis (2nd floor)</td>
+                        <td>Equipment kills</td>
+                        <td>250 salvage + Perk</td>
+                    </tr>
+                    <tr>
+                        <td>5-6</td>
+                        <td>Luminarium (bookcase)</td>
+                        <td>Field upgrade kills</td>
+                        <td>250 salvage + Perk</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- STEP 1 -->
+            <div id="step1" class="content-section">
+                <h2>Step 1-3: Power & Pack-a-Punch Activation</h2>
+                
+                <a href="https://www.youtube.com/watch?v=MxgEVlnU85s&t=61" target="_blank" class="video-link">▶ Click here for video instructions</a>
+
+                <h3>Get Bone Saw First</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div><strong>Go to Museum Infinitum</strong><br>Right side of spawn, find the glass display case</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div><strong>Break the glass</strong><br>Grab the BONE SAW - you'll need it later!</div>
+                    </div>
+                </div>
+
+                <h3>Collect Harmonic Components</h3>
+                <p>Collect both components as you encounter them:</p>
+                <ul>
+                    <li><strong>Component 1:</strong> Luminarium (at Juggernog or on stairs)</li>
+                    <li><strong>Component 2:</strong> Machina Astralis (next to Arsenal Machine or second floor)</li>
+                </ul>
+
+                <h3>Power Activation</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Bring both harmonic components to the Observatory</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Place them in the Harmonic Oculus</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>Defend for 45 seconds against incoming zombies</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div><strong>Power is now activated!</strong></div>
+                    </div>
+                </div>
+
+                <h3>Pack-a-Punch Activation</h3>
+                <p>Follow on-screen instructions. Pack-a-punch your weapon IMMEDIATELY - essential for following steps.</p>
+
+                <div class="warning">
+                    <strong>⚠️ First Oscar Spawn:</strong> Oscar spawns shortly after Power activation! Watch and be ready.
+                </div>
+            </div>
+
+            <!-- STEP 2 -->
+            <div id="step2" class="content-section">
+                <h2>Step 4: Oscar Components Gathering</h2>
+                
+                <a href="https://www.youtube.com/watch?v=MxgEVlnU85s&t=96" target="_blank" class="video-link">▶ Click here for video instructions</a>
+
+                <h3>Tessy Auto Battery</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Find Tessy the car on the map</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div><strong>Use Pack-a-Punch weapon</strong> and shoot the hood</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>The battery ejects - pick it up!</div>
+                    </div>
+                </div>
+
+                <h3>Three Purple Crystal Shards</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Ensure you have 500 salvage</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Go to Arsenal Machine</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>Equip <strong>Cryofreeze ammo-mod</strong> on your weapon</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>Search the map for 3 purple crystals</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div>Shoot each crystal with Cryofreeze</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div>Collect all shards</div>
+                    </div>
+                </div>
+
+                <h3>Apparent Wires</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Find a <strong>FLICKERING street lamp</strong> on the map</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Multiple spawn locations possible - watch for flashing!</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>Shoot the lamp a few times</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>The wires drop out - pick up!</div>
+                    </div>
+                </div>
+
+                <h3>Pack-a-Punch Chamber Sequence</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Go to Pack-a-Punch room</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Hold SQUARE on the ORGAN</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>The organ plays tones</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>Find VENTS in the room producing steam</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div>Shoot the steaming vent</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div>Steam moves to next vent - YOU'RE ON TIMER!</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">7</div>
+                        <div>Find and shoot the next vent quickly</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">8</div>
+                        <div>Repeat 6-7 times</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">9</div>
+                        <div><strong>Success = Audio cue + Telescope moves!</strong></div>
+                    </div>
+                </div>
+
+                <div class="warning">
+                    <strong>⚠️ Oscar Appears:</strong> A mini-boss Oscar spawns - DO NOT KILL HIM! You need him later!
+                </div>
+            </div>
+
+            <!-- STEP 3 -->
+            <div id="step3" class="content-section">
+                <h2>Step 5: Oscar 3x Kills</h2>
+                
+                <a href="https://www.youtube.com/watch?v=MxgEVlnU85s&t=306" target="_blank" class="video-link">▶ Click here for video instructions</a>
+
+                <p>You must kill Oscar 3 DIFFERENT ways. You can do these in any order - this order is most efficient.</p>
+
+                <h3>Oscar Kill #1 - Sun Laser (Fastest)</h3>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">☀️ Sun Laser Trap <span>▼</span></div>
+                    <div class="dropdown-content">
+                        <strong>Setup:</strong>
+                        <ul>
+                            <li>Go to Pack-a-Punch room</li>
+                            <li>Hold SQUARE on the ORGAN</li>
+                            <li>The organ plays tones</li>
+                        </ul>
+                        <br>
+                        <strong>Steam Pistons:</strong>
+                        <ul>
+                            <li>Find VENTS in the room</li>
+                            <li>One produces steam</li>
+                            <li>Shoot the steaming vent</li>
+                            <li>RUN to next steam vent - TIMER!</li>
+                            <li>Shoot it - steam moves</li>
+                            <li>Repeat 6-7 times total</li>
+                            <li>Success = Audio cue + Telescope moves</li>
+                        </ul>
+                        <br>
+                        <strong>Kill Oscar:</strong>
+                        <ul>
+                            <li>Ensure Oscar is nearby</li>
+                            <li>Hold SQUARE on telescope viewfinder</li>
+                            <li>Aim the viewfinder at the SUN</li>
+                            <li>Perfect alignment - you get absorbed</li>
+                            <li>LASER BEAM shoots through telescope!</li>
+                            <li>Lead Oscar through the laser beam</li>
+                            <li><strong>PRO:</strong> Shoot his UFOs to stagger him!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Oscar Kill #2 - Luminarium Laser</h3>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">⚡ Luminarium Trap <span>▼</span></div>
+                    <div class="dropdown-content">
+                        <strong>Setup:</strong>
+                        <ul>
+                            <li>Wait for next Oscar to spawn</li>
+                            <li>Go to LUMINARIUM laser trap</li>
+                            <li>Install components in trap:</li>
+                            <li style="margin-left: 20px;">- Tessy battery</li>
+                            <li style="margin-left: 20px;">- Apparent wires</li>
+                            <li style="margin-left: 20px;">- Damaged UFO disc</li>
+                        </ul>
+                        <br>
+                        <strong>Execution:</strong>
+                        <ul>
+                            <li>Lead Oscar to Luminarium</li>
+                            <li>Activate trap (FIRST TIME FREE!)</li>
+                            <li>Lockdown sequence starts</li>
+                            <li>Charging bar appears: "Charging"</li>
+                            <li>Shoot Oscar's UFOs while trap charges</li>
+                            <li>Stay alive!</li>
+                            <li>Wait for charge bar to fill</li>
+                            <li>Oscar dies!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Oscar Kill #3 - Rocket Blast</h3>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">🚀 Rocket Trap <span>▼</span></div>
+                    <div class="dropdown-content">
+                        <strong>Setup:</strong>
+                        <ul>
+                            <li>Wait for next Oscar spawn</li>
+                            <li>Go to MUSEUM room</li>
+                            <li>Find the ROCKET</li>
+                        </ul>
+                        <br>
+                        <strong>Execution:</strong>
+                        <ul>
+                            <li>Lead Oscar to BACK of rocket</li>
+                            <li>Use your 3 CRYSTAL SHARDS on rocket</li>
+                            <li>Interact with SIDE of rocket</li>
+                            <li>COUNTDOWN starts (5-6 seconds)</li>
+                            <li><strong>CRITICAL:</strong> Oscar must be at BACK when countdown hits 0!</li>
+                            <li>Rocket blasts off!</li>
+                            <li>Oscar freezes and dies!</li>
+                        </ul>
+                        <br>
+                        <strong>BONUS:</strong> If this is your LAST kill, get the WONDER WEAPON!
+                    </div>
+                </div>
+
+                <div class="tip">
+                    <strong>💡 Tip:</strong> When you kill Oscar 3x, you receive a notification that you got the Wonder Weapon. Find it and pick it up!
+                </div>
+            </div>
+
+            <!-- STEP 4 -->
+            <div id="step4" class="content-section">
+                <h2>Step 6: Wonder Weapon Details</h2>
+                
+                <a href="https://www.youtube.com/watch?v=MxgEVlnU85s&t=289" target="_blank" class="video-link">▶ Click here for video instructions</a>
+
+                <h3>Getting the Damaged UFO Disc</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Wait for Oscar to spawn</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Look at the small UFOs floating around Oscar</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>Shoot the small UFOs</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>A Damaged UFO Disc falls out</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div>Pick it up!</div>
+                    </div>
+                </div>
+
+                <div class="tip">
+                    <strong>💡 Important:</strong> You need this disc for the Luminarium laser trap! It's part of the second Oscar kill method.
+                </div>
+
+                <h3>Wonder Weapon Upgrade</h3>
+                <p>The Wonder Weapon you get is the <strong>LGM-1</strong>. It fires special energy blasts and is essential for the Mars symbol pillar activation step. Keep it and manage ammo carefully.</p>
+            </div>
+
+            <!-- STEP 5 -->
+            <div id="step5" class="content-section">
+                <h2>Step 7: Oscar Audio & Planet Code</h2>
+                
+                <a href="https://www.youtube.com/watch?v=KR4SG1V8nf0&t=856" target="_blank" class="video-link">▶ Click here for video instructions</a>
+
+                <h3>Zombie Sitter Exploit (MUST DO)</h3>
+                <div class="warning">
+                    <strong>⚠️ This is the Hardest Step - Use Exploit:</strong><br><br>
+                    1. Leave 1 zombie at round end<br>
+                    2. Buy <strong>Wisp Tea perk</strong><br>
+                    3. Upgrade with <strong>Zombie Sitter</strong><br>
+                    4. Shoot the zombie<br>
+                    5. Wisp will tend this zombie continuously<br>
+                    <br>
+                    YOU NOW HAVE 10 FULL MINUTES TO FOLLOW OSCAR!
+                </div>
+
+                <h3>Following Oscar</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Wait for next Oscar spawn</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Keep Oscar in YELLOW LIGHT mode (not spotted)</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>Follow Oscar as he walks around</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>Oscar plays AUDIO RECORDINGS</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div><strong>TURN ON CAPTIONS!</strong> Helps enormously!</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div>Listen for "Remember?" voice</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">7</div>
+                        <div><strong>WRITE DOWN 3 PLANETS</strong> he mentions (e.g., Venus, Jupiter, Neptune)</div>
+                    </div>
+                </div>
+
+                <h3>Planets to Code Conversion</h3>
+                <table>
+                    <tr>
+                        <th>Planet</th>
+                        <th>Code</th>
+                    </tr>
+                    <tr>
+                        <td>Mercury</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>Venus</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>Earth</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>Mars</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td>Jupiter</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>Saturn</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td>Uranus</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td>Neptune</td>
+                        <td>8</td>
+                    </tr>
+                </table>
+
+                <h3>Example Calculation</h3>
+                <div class="step-box">
+                    Oscar said: <strong>"Venus, Jupiter, Neptune"</strong><br><br>
+                    Code: 2-5-8 (Venus=2, Jupiter=5, Neptune=8)
+                </div>
+
+                <h3>Enter Code in Observatory</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Go to Pack-a-Punch room</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Find small device/apparatus in room</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>Enter your 3-digit code</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>Platform moves downward!</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div>Climb up and hold SQUARE on body</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div>Pick up the CRYO KEY!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 6 -->
+            <div id="step6" class="content-section">
+                <h2>Step 8: Mars Declination Code</h2>
+                
+                <a href="https://www.youtube.com/watch?v=MxgEVlnU85s&t=409" target="_blank" class="video-link">▶ Click here for video instructions</a>
+
+                <h3>Read Mars Declination</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Go back to telescope viewfinder in Pack-a-Punch room</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Hold SQUARE on the viewfinder</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div><strong>Aim PERFECTLY at the CENTER of MARS</strong></div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>Look at bottom of your screen</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div>You see: <strong>"DECK: [4 numbers]"</strong></div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div><strong>WRITE DOWN THESE 4 NUMBERS!</strong></div>
+                    </div>
+                </div>
+
+                <div class="warning">
+                    <strong>⚠️ Add Zero:</strong> If screen shows "DECK: 57°5'", your code is NOT 575 but <strong>5705</strong> (add zero)!
+                </div>
+
+                <h3>Enter Code in Machina Astralis</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Go to Machina Astralis</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Find metal box/device</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>Enter your 4-digit code</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>You see "READY" on screen = correct!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 7 -->
+            <div id="step7" class="content-section">
+                <h2>Step 9-11: Extract & Install Brain</h2>
+                
+                <a href="https://www.youtube.com/watch?v=MxgEVlnU85s&t=667" target="_blank" class="video-link">▶ Click here for video instructions</a>
+
+                <h3>Extract Brain from Cryopod</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Go to MACHINA ASTRALIS (large floating solar system room)</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>At SOUTH side is a connecting chamber</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>In this chamber is a CRYOPOD</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>Hold SQUARE on the cryopod</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div>Body inside is exposed</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div><strong>Use the BONE SAW</strong> (grabbed earlier!)</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">7</div>
+                        <div>Hold SQUARE on the exposed head</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">8</div>
+                        <div>Cutting sequence starts - you extract the brain!</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">9</div>
+                        <div>Pick up the BRAIN!</div>
+                    </div>
+                </div>
+
+                <div class="warning">
+                    <strong>⚠️ OSCAR ATTACKS:</strong> Oscar teleports and attacks! Be prepared to fight!
+                </div>
+
+                <h3>Place Brain in Canister (Lockdown)</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Find the brain canister on map</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Hold SQUARE to place brain in canister</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>Hold SQUARE AGAIN</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div><strong>LOCKDOWN SEQUENCE STARTS (60 seconds)</strong></div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div><strong>DEFEND THE BRAIN!</strong> Zombies spawn massively!</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div>Survive 60 seconds</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">7</div>
+                        <div>Hold SQUARE AGAIN</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">8</div>
+                        <div>Pick up the BRAIN!</div>
+                    </div>
+                </div>
+
+                <h3>Install Brain in Machina Astralis</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Go to Machina Astralis (solar system room)</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Find the slot for the brain</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>Hold SQUARE to install brain</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>You craft it in place</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div><strong>Thirsten's READING LIST appears on screen!</strong></div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div><strong>WRITE DOWN ALL BOOKS YOU SEE!</strong> (3-6 books)</div>
+                    </div>
+                </div>
+
+                <div class="tip">
+                    <strong>💡 Write Carefully:</strong> You need this book list for the Busts step!
+                </div>
+            </div>
+
+            <!-- STEP 8 -->
+            <div id="step8" class="content-section">
+                <h2>Step 12: Library Busts & Planet</h2>
+                
+                <a href="https://www.youtube.com/watch?v=MxgEVlnU85s&t=802" target="_blank" class="video-link">▶ Click here for video instructions</a>
+
+                <h3>Static Book Division (Does NOT Vary!)</h3>
+                <table>
+                    <tr>
+                        <th>Bust #1</th>
+                        <th>Bust #2</th>
+                        <th>Bust #3</th>
+                    </tr>
+                    <tr>
+                        <td>Black Veil</td>
+                        <td>Ashen Bone</td>
+                        <td>Pyramid of Sedonia</td>
+                    </tr>
+                    <tr>
+                        <td>Moon Directive</td>
+                        <td>Unknowable Void</td>
+                        <td>Witchlike Codex</td>
+                    </tr>
+                    <tr>
+                        <td>Music Universalis</td>
+                        <td>Echoes of Andromeda</td>
+                        <td>Silence at Singularity</td>
+                    </tr>
+                </table>
+
+                <h3>Busts Procedure</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Go to LIBRARY</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>You see 3 BUSTS (statues)</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div><strong>Count how many of YOUR books are on EACH bust shelf</strong></div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>Example: You have "Veil" + "Void" + "Andromeda" + "Codex"</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div>Bust 1: 1 book (Veil) = hold SQUARE 1x</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div>Bust 2: 2 books (Void, Andromeda) = hold SQUARE 2x</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">7</div>
+                        <div>Bust 3: 1 book (Codex) = hold SQUARE 1x</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">8</div>
+                        <div><strong>YOU MUST BE FAST - TIMER!</strong></div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">9</div>
+                        <div>Listen for audio cue = success!</div>
+                    </div>
+                </div>
+
+                <h3>Get Planet from Hatch</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>If busts correct, go up via ladder</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>HATCH is open</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>Pick up the PLANET (NEPTUNE)</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>Go back to Machina Astralis</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div>Install planet on the empty PRONG</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div>Planet now in solar system!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 9 -->
+            <div id="step9" class="content-section">
+                <h2>Step 13: Planet Directions Alignment</h2>
+                
+                <a href="https://www.youtube.com/watch?v=KR4SG1V8nf0&t=1287" target="_blank" class="video-link">▶ Click here for video instructions</a>
+
+                <p>You already collected these papers in your travels. Use them now!</p>
+
+                <h3>Rotate Three Planets to Directions</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Go to Machina Astralis (solar system)</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Look UP at CHANDELIER</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div><strong>Chandelier = COMPASS</strong> with directions marked</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>You must rotate 3 planets: MARS, SATURN, NEPTUNE</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div>Shoot each planet to rotate it</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div><strong>Rotate each planet to match direction from your paper</strong></div>
+                    </div>
+                </div>
+
+                <h3>Direction Guidelines</h3>
+                <table>
+                    <tr>
+                        <th>Abbrev</th>
+                        <th>Meaning</th>
+                    </tr>
+                    <tr>
+                        <td>N</td>
+                        <td>North</td>
+                    </tr>
+                    <tr>
+                        <td>S</td>
+                        <td>South</td>
+                    </tr>
+                    <tr>
+                        <td>E</td>
+                        <td>East</td>
+                    </tr>
+                    <tr>
+                        <td>W</td>
+                        <td>West</td>
+                    </tr>
+                    <tr>
+                        <td>NE</td>
+                        <td>Northeast</td>
+                    </tr>
+                    <tr>
+                        <td>NW</td>
+                        <td>Northwest</td>
+                    </tr>
+                    <tr>
+                        <td>SE</td>
+                        <td>Southeast</td>
+                    </tr>
+                    <tr>
+                        <td>SW</td>
+                        <td>Southwest</td>
+                    </tr>
+                </table>
+
+                <h3>Activate Planets Complete</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>When all 3 planets point correct direction...</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Go to the BRAIN (Thirsten's brain)</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>Hold SQUARE on brain</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 10 -->
+            <div id="step10" class="content-section">
+                <h2>Step 14: Oscar UFO Defense Lockdown</h2>
+                
+                <a href="https://www.youtube.com/watch?v=MxgEVlnU85s&t=1071" target="_blank" class="video-link">▶ Click here for video instructions</a>
+
+                <h3>2-Minute UFO Defense</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>LOCKDOWN sequence starts</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Oscar spawns and shoots UFOs at the structure</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div><strong>DEFEND THE STRUCTURE!</strong></div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>Shoot ALL UFOs that Oscar launches</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div>Wait until charge bar fills</div>
+                    </div>
+                </div>
+
+                <h3>Successful Defense</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Charge bar full = success!</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div><strong>PORTAL OPENS!</strong></div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>You get SUCKED INTO the portal</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 11 -->
+            <div id="step11" class="content-section">
+                <h2>Step 16-17: Mars - Thirsten & Bird Sequence</h2>
+                
+                <a href="https://www.youtube.com/watch?v=MxgEVlnU85s&t=1099" target="_blank" class="video-link">▶ Click here for video instructions</a>
+
+                <h3>Install Thirsten on Mars</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>You're now on MARS!</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>A canister falls from sky = THIRSTEN</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>RUN to canister</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>Hold SQUARE to pick up</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div>CARRY to device</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div>Hold SQUARE to place</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">7</div>
+                        <div>Hold SQUARE AGAIN to lock in place</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">8</div>
+                        <div>Thirsten says "Hmm, that's odd"</div>
+                    </div>
+                </div>
+
+                <h3>Catch the Bird (IMMEDIATE!)</h3>
+                <div class="warning">
+                    <strong>⚠️ CRITICAL TIMING:</strong> This must happen IMMEDIATELY after Thirsten speaks!
+                </div>
+
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>RUN IMMEDIATELY to BACK of Mars area</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Look OUT the WINDOW</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>You see something TINY flying</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>Shoot the RIGHT BACK metal pillar</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div>Shoot the LEFT BACK pillar</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div>Shoot the RIGHT FRONT pillar</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">7</div>
+                        <div>Shoot the LEFT FRONT pillar</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">8</div>
+                        <div>Turn 180 degrees around</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">9</div>
+                        <div>Shoot the TOP pillar (above portal)</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">10</div>
+                        <div><strong>THE BIRD COMES IN!</strong></div>
+                    </div>
+                </div>
+
+                <h3>Grab the Bird</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Bird now flies around</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Wait for LOW GRAVITY</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>Keep shooting back pillar to attract bird</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>Bird floats to one area</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div><strong>JUMP UP AND GRAB BIRD!</strong></div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div>Go to small statue</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">7</div>
+                        <div>Place bird in statue slot</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 12 -->
+            <div id="step12" class="content-section">
+                <h2>Step 18: Organ Symbols & Mars Pillars</h2>
+                
+                <a href="https://www.youtube.com/watch?v=MxgEVlnU85s&t=1196" target="_blank" class="video-link">▶ Click here for video instructions</a>
+
+                <h3>Get Symbols from Organ</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Go BACK to EARTH (through portal)</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Go to Pack-a-Punch room (Observatory)</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>Find the ORGAN/OSCILLOSCOPE on console</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>Hold SQUARE to start</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div>Organ plays music</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div><strong>5 SYMBOLS appear in sequence on screen</strong></div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">7</div>
+                        <div><strong>WRITE DOWN ALL 5 SYMBOLS IN ORDER!</strong></div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">8</div>
+                        <div>1 of the 5 symbols will be BLANK (omission/gap)</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">9</div>
+                        <div>Go BACK to Mars via teleporter</div>
+                    </div>
+                </div>
+
+                <h3>Organ Symbols Reference</h3>
+                <p>Here are all possible symbols appearing on organ. Use this reference to quickly recognize symbols:</p>
+                <table>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Organ Name</th>
+                        <th>Pillar Number</th>
+                        <th>Pillar Position</th>
+                    </tr>
+                    <tr>
+                        <td>CIRCLE</td>
+                        <td>Circle / Disc</td>
+                        <td>Pylon 1</td>
+                        <td>Back Right - SE</td>
+                    </tr>
+                    <tr>
+                        <td>TRIANGLE</td>
+                        <td>Triangle Up</td>
+                        <td>Pylon 2</td>
+                        <td>Back Left - SW</td>
+                    </tr>
+                    <tr>
+                        <td>SQUARE</td>
+                        <td>Square</td>
+                        <td>Pylon 3</td>
+                        <td>Front Right - NE</td>
+                    </tr>
+                    <tr>
+                        <td>STAR</td>
+                        <td>Five-Point Star</td>
+                        <td>Pylon 4</td>
+                        <td>Front Left - NW</td>
+                    </tr>
+                    <tr>
+                        <td>WAVE</td>
+                        <td>Wavy Line</td>
+                        <td>Pylon 5</td>
+                        <td>Center Top</td>
+                    </tr>
+                </table>
+
+                <div class="tip">
+                    <strong>💡 Blank Explanation:</strong> One of the 5 organ positions will show NO symbol (empty/blank). This stands for the MISSING symbol.<br><br>
+                    <strong>Example:</strong> Saw Circle, Triangle, Square, Star AND BLANK? Then WAVE is your missing 5th symbol! Write Wave and go to Pylon 5!
+                </div>
+
+                <h3>Warm Up Pillars</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>You're back on MARS</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>You see 5 PILLARS/PYLONS with symbols at base</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div><strong>Grab your LGM-1 WONDER WEAPON</strong></div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>Shoot the TOP/PEAK of all 5 pillars</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div>When you hit a pillar, you hear audio cue</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div>All 5 symbols at base now glow DULL BLUE</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">7</div>
+                        <div>You're ready for final step!</div>
+                    </div>
+                </div>
+
+                <h3>Mars Pillar Locations Reference</h3>
+                <p><strong>Remember these positions for when you activate symbols:</strong></p>
+                <table>
+                    <tr>
+                        <th>Pillar #</th>
+                        <th>Arena Position</th>
+                        <th>Recognition</th>
+                        <th>Arena Angle</th>
+                    </tr>
+                    <tr>
+                        <td>Pylon 1</td>
+                        <td>Back Right</td>
+                        <td>Back pillar on right side</td>
+                        <td>Southeast (SE)</td>
+                    </tr>
+                    <tr>
+                        <td>Pylon 2</td>
+                        <td>Back Left</td>
+                        <td>Back pillar on left side</td>
+                        <td>Southwest (SW)</td>
+                    </tr>
+                    <tr>
+                        <td>Pylon 3</td>
+                        <td>Front Right</td>
+                        <td>Front pillar on right (at window)</td>
+                        <td>Northeast (NE)</td>
+                    </tr>
+                    <tr>
+                        <td>Pylon 4</td>
+                        <td>Front Left</td>
+                        <td>Front pillar on left (at window)</td>
+                        <td>Northwest (NW)</td>
+                    </tr>
+                    <tr>
+                        <td>Pylon 5</td>
+                        <td>Top/Center</td>
+                        <td>Central pillar above teleporter</td>
+                        <td>Center</td>
+                    </tr>
+                </table>
+
+                <h3>Activate Pillars in Correct Sequence (TIMER - CRITICAL!)</h3>
+                <div class="warning">
+                    <strong>⚠️ TIMING ESSENTIAL:</strong> You have a strict TIMER once you start! You must run pillar to pillar fast!
+                </div>
+
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div><strong>Recognize your FIRST symbol</strong> from Organ notes</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Find the pylon WITH that symbol (see table above)</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>RUN to that pylon and hold SQUARE</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div>Symbol lights up = you did it right!</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">5</div>
+                        <div><strong>RUN IMMEDIATELY</strong> to pylon #2 in your sequence</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">6</div>
+                        <div>Hold SQUARE (same process)</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">7</div>
+                        <div>Repeat for pylon #3, #4, #5 in order</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">8</div>
+                        <div><strong>Each symbol must be in CORRECT SEQUENCE!</strong></div>
+                    </div>
+                </div>
+
+                <h3>Success!</h3>
+                <div class="step-box">
+                    All symbols stay BLUE/GREEN glowing = you did it right!<br><br>
+                    <strong>YOU'RE NOW READY FOR BOSS FIGHT! Hold SQUARE on brain to start boss fight!</strong>
+                </div>
+            </div>
+
+            <!-- BOSS PREP -->
+            <div id="boss-prep" class="content-section">
+                <h2>Boss Fight - Preparation</h2>
+
+                <a href="https://www.youtube.com/watch?v=MxgEVlnU85s&t=1371" target="_blank" class="video-link">▶ Click here for video instructions</a>
+
+                <h3>What You Need</h3>
+                <table>
+                    <tr>
+                        <th>Category</th>
+                        <th>Item</th>
+                        <th>Notes</th>
+                    </tr>
+                    <tr>
+                        <td>Ammo Mod</td>
+                        <td>Shatter Blast</td>
+                        <td>Best for armor damage</td>
+                    </tr>
+                    <tr>
+                        <td>Gobble Gums</td>
+                        <td>Spin</td>
+                        <td>Extra gobbles</td>
+                    </tr>
+                    <tr>
+                        <td>Gobble Gums</td>
+                        <td>Near-Death Experience</td>
+                        <td>Easy mode</td>
+                    </tr>
+                    <tr>
+                        <td>Points</td>
+                        <td>15,000 - 20,000</td>
+                        <td>For armor purchase</td>
+                    </tr>
+                    <tr>
+                        <td>Ammo</td>
+                        <td>Full weapons</td>
+                        <td>Pack-a-Punch preferred</td>
+                    </tr>
+                    <tr>
+                        <td>Equipment</td>
+                        <td>Sufficient supplies</td>
+                        <td>Grenades, Syntax, etc.</td>
+                    </tr>
+                </table>
+
+                <h3>Co-op Setup</h3>
+                <div class="tip">
+                    <strong>💡 Boss UFO Defense:</strong> Train ALL in SAME direction (clockwise) to avoid Oscar's lasers!<br><br>
+                    <strong>💡 Final Phase:</strong> Ether Shroud + Group Shroud augment = invisible for everyone!
+                </div>
+            </div>
+
+            <!-- BOSS FIGHT -->
+            <div id="boss-fight" class="content-section">
+                <h2>Boss Fight - Caltheris (All 6 Phases)</h2>
+
+                <a href="https://www.youtube.com/watch?v=MxgEVlnU85s&t=1397" target="_blank" class="video-link">▶ Click here for video instructions</a>
+
+                <h3>Start Boss Fight</h3>
+                <div class="step-box">
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <div>Go to Thirsten's brain (Machina Astralis)</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <div>Hold SQUARE</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <div>Vote to accept</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">4</div>
+                        <div><strong>BOSS FIGHT BEGINS!</strong></div>
+                    </div>
+                </div>
+
+                <h3>PHASE 1: Right Pillar Charging</h3>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">⚡ Phase 1 <span>▼</span></div>
+                    <div class="dropdown-content">
+                        <strong>Procedure:</strong>
+                        <ul>
+                            <li>Kill zombies in arena</li>
+                            <li>Their souls flow to RIGHT pillar</li>
+                            <li>Wait until pillar is FULLY CHARGED</li>
+                            <li>Go to brain (middle)</li>
+                            <li>Hold SQUARE</li>
+                            <li>Laser shoots at boss!</li>
+                            <li>Boss loses health!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>PHASE 2: Left Pillar Charging</h3>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">⚡ Phase 2 <span>▼</span></div>
+                    <div class="dropdown-content">
+                        <strong>Procedure:</strong>
+                        <ul>
+                            <li>Kill zombies in arena</li>
+                            <li>Their souls flow to LEFT pillar</li>
+                            <li>Wait until pillar is FULLY CHARGED</li>
+                            <li>Go to brain</li>
+                            <li>Hold SQUARE</li>
+                            <li>Another laser!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>PHASE 3: Both Pillars (HARDER!)</h3>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">⚡ Phase 3 <span>▼</span></div>
+                    <div class="dropdown-content">
+                        <strong>What Happens:</strong>
+                        <ul>
+                            <li>GAS spreads in lower area</li>
+                            <li>You're forced UPWARD (tighter!)</li>
+                            <li>LASERS from boss target you</li>
+                        </ul>
+                        <br>
+                        <strong>Strategy:</strong>
+                        <ul>
+                            <li><strong>Co-op:</strong> Train ALL in SAME direction!</li>
+                            <li>Wrong = you run into each other's lasers!</li>
+                            <li>Use Monkey Bombs if needed</li>
+                            <li>Max Ammo comes later</li>
+                            <li>Charge both pillars fully</li>
+                            <li>Activate brain</li>
+                            <li>Third laser!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>PHASE 4: Boss Spawn & Armor</h3>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">⚡ Phase 4 <span>▼</span></div>
+                    <div class="dropdown-content">
+                        <strong>Boss Spawns:</strong>
+                        <ul>
+                            <li>FAKE OUT! Boss not dead yet!</li>
+                            <li>Boss spawns in NEW FORM in middle</li>
+                            <li>HAS ARMOR - DESTROY FIRST!</li>
+                        </ul>
+                        <br>
+                        <strong>Remove Armor:</strong>
+                        <ul>
+                            <li>Throw SYNTAX grenades</li>
+                            <li>Use Shatter Blast ammo</li>
+                            <li>Use Ion Sniper</li>
+                        </ul>
+                        <br>
+                        <strong>Weak Spots:</strong>
+                        <ul>
+                            <li>When armor gone = WEAK SPOTS appear</li>
+                            <li>Shoot ONLY weak spots!</li>
+                            <li>This maximizes damage</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>PHASE 5: Repeat Cycle</h3>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">⚡ Phase 5 <span>▼</span></div>
+                    <div class="dropdown-content">
+                        <strong>Boss Cycle:</strong>
+                        <ul>
+                            <li>Boss immune and returns</li>
+                            <li>Destroy armor AGAIN</li>
+                            <li>Shoot weak spots</li>
+                            <li>Boss Attacks:</li>
+                            <li style="margin-left: 20px;">- SLAM ATTACK: Jump up (reduces damage)</li>
+                            <li style="margin-left: 20px;">- ROCK THROW: Break line of sight (rock explodes)</li>
+                            <li style="margin-left: 20px;">- Stay FAR from boss</li>
+                            <li>Boss dies</li>
+                            <li>Immune phase</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>PHASE 6: FINAL (HARDEST!)</h3>
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">⚡ Phase 6 - FINAL <span>▼</span></div>
+                    <div class="dropdown-content">
+                        <strong>Powerup!</strong>
+                        <ul>
+                            <li>Boss comes FINAL time</li>
+                            <li>You get NEW POWERUP</li>
+                            <li>Powerup gives: INFINITE EQUIPMENT + possibly INFINITE AMMO</li>
+                        </ul>
+                        <br>
+                        <strong>Powerup Phase:</strong>
+                        <ul>
+                            <li>SPAM equipment like crazy!</li>
+                            <li>Maximize boss damage</li>
+                            <li>After powerup = play careful</li>
+                        </ul>
+                        <br>
+                        <strong>PURPLE ELECTRICITY:</strong>
+                        <ul>
+                            <li>NEW ATTACK: Purple rocks</li>
+                            <li>These create electricity pools</li>
+                            <li><strong>DO NOT RUN INTO PURPLE POOL!</strong> You die!</li>
+                            <li>Navigate carefully</li>
+                        </ul>
+                        <br>
+                        <strong>War of Attrition:</strong>
+                        <ul>
+                            <li>Buy armor (10,000 points)</li>
+                            <li>Buy ammo</li>
+                            <li>Keep shooting & moving</li>
+                            <li>Avoid electricity pools</li>
+                            <li>Shoot boss dead!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>SUCCESS!</h3>
+                <div class="step-box">
+                    <strong>🎉 CONGRATULATIONS!</strong><br>
+                    You've completed the Astra Malorum Easter Egg!
+                </div>
+
+                <div class="tip">
+                    <strong>💡 Total Time:</strong> With efficiency tips = 13-15 rounds!
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="previousSection()">← Previous</button>
+                <button class="btn btn-secondary" onclick="nextSection()">Next →</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const sections = [
+            'intro', 'loadout', 'pap-secrets', 'efficiency', 'step1', 'step2', 'step3', 'step4', 'step5', 'step6',
+            'step7', 'step8', 'step9', 'step10', 'step11', 'step12', 'boss-prep', 'boss-fight'
+        ];
+        let currentIndex = 0;
+
+        // Sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const toggleBtn = document.querySelector('.sidebar-toggle-btn');
+            const mainContent = document.querySelector('.main-content');
+            
+            sidebar.classList.toggle('collapsed');
+            
+            // Update button arrow direction
+            if (sidebar.classList.contains('collapsed')) {
+                toggleBtn.innerHTML = '›';
+            } else {
+                toggleBtn.innerHTML = '‹';
+            }
+        }
+        
+        // Handle mobile swipe to open/close sidebar
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, false);
+        
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, false);
+        
+        function handleSwipe() {
+            if (window.innerWidth <= 768) {
+                if (touchEndX > touchStartX + 50) { // Swipe Right
+                    document.querySelector('.sidebar').classList.remove('collapsed');
+                }
+                if (touchEndX < touchStartX - 50) { // Swipe Left
+                    document.querySelector('.sidebar').classList.add('collapsed');
+                }
+            }
+        }
+
+        document.querySelectorAll('[data-section]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sectionId = link.getAttribute('data-section');
+                showSection(sectionId);
+                updateActiveLink(link);
+                
+                // On mobile, close sidebar after click
+                if (window.innerWidth <= 768) {
+                    document.querySelector('.sidebar').classList.add('collapsed');
+                }
+            });
+        });
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.classList.add('active');
+                currentIndex = sections.indexOf(sectionId);
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function updateActiveLink(link) {
+            document.querySelectorAll('[data-section]').forEach(l => {
+                l.classList.remove('active');
+            });
+            link.classList.add('active');
+        }
+
+        function previousSection() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showSection(sections[currentIndex]);
+                const link = document.querySelector(`[data-section="${sections[currentIndex]}"]`);
+                updateActiveLink(link);
+            }
+        }
+
+        function nextSection() {
+            if (currentIndex < sections.length - 1) {
+                currentIndex++;
+                showSection(sections[currentIndex]);
+                const link = document.querySelector(`[data-section="${sections[currentIndex]}"]`);
+                updateActiveLink(link);
+            }
+        }
+
+        document.querySelectorAll('.dropdown-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                content.classList.toggle('active');
+                
+                const arrow = header.querySelector('span');
+                if (content.classList.contains('active')) {
+                    arrow.style.transform = 'rotate(180deg)';
+                } else {
+                    arrow.style.transform = 'rotate(0deg)';
+                }
+            });
+        });
+
+        // Initialize first section
+        const firstLink = document.querySelector('[data-section="intro"]');
+        if (firstLink) {
+            firstLink.classList.add('active');
+        }
+        
+        // Initialize sidebar state based on screen size
+        if (window.innerWidth <= 768) {
+            document.querySelector('.sidebar').classList.add('collapsed');
+            document.querySelector('.sidebar-toggle-btn').innerHTML = '›';
+        }
+    </script>
+</body>
+</html>
