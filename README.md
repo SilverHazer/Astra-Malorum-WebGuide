@@ -7,7 +7,7 @@
 A comprehensive, professional-grade interactive web guide for completing the **Astra Malorum Easter Egg** in **Call of Duty: Black Ops 7 Zombies**. Built with modern web technologies for smooth navigation, seamless video integration, and an optimized user experience.
 
 **Live version:**
-https://htmlpreview.github.io/?https://github.com/SilverHazer/Astra-Malorum-WebGuide/blob/main/Astra%20Malorum%20Easter%20Egg.html
+https://htmlpreview.github.io/?https://github.com/SilverHazer/Astra-Malorum-WebGuide/blob/main/index.html
 
 ## ✨ Features
 
