@@ -1,4 +1,9 @@
 # 🧟 Astra Malorum Easter Egg - Complete Interactive Guide
+
+**Updated 10 december**
+- **Fixed:** Video frame and autoplay from correct timestamp.
+- **Added:** Pack-a-Punch Secret Weapons Guide and new glitches
+
 A comprehensive, professional-grade interactive web guide for completing the **Astra Malorum Easter Egg** in **Call of Duty: Black Ops 7 Zombies**. Built with modern web technologies for smooth navigation, seamless video integration, and an optimized user experience.
 
 **Live version:**
