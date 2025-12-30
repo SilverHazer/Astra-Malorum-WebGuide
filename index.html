@@ -87,7 +87,7 @@
             color: white;
         }
 
-        .sidebar.collapsed + .sidebar-toggle-btn {
+        .sidebar-toggle-btn.collapsed {
             left: 0;
         }
 
@@ -478,7 +478,7 @@
                 color: white;
             }
             
-            .sidebar.active + .sidebar-toggle-btn {
+            .sidebar-toggle-btn.active {
                 left: 300px;
             }
         }
@@ -2232,6 +2232,7 @@
             const mainContent = document.querySelector('.main-content');
             
             sidebar.classList.toggle('collapsed');
+            toggleBtn.classList.toggle('collapsed');
             
             // Update button arrow direction
             if (sidebar.classList.contains('collapsed')) {
@@ -2256,11 +2257,17 @@
         
         function handleSwipe() {
             if (window.innerWidth <= 768) {
+                const sidebar = document.querySelector('.sidebar');
+                const toggleBtn = document.querySelector('.sidebar-toggle-btn');
                 if (touchEndX > touchStartX + 50) { // Swipe Right
-                    document.querySelector('.sidebar').classList.remove('collapsed');
+                    sidebar.classList.remove('collapsed');
+                    toggleBtn.classList.remove('collapsed');
+                    toggleBtn.innerHTML = '‹';
                 }
                 if (touchEndX < touchStartX - 50) { // Swipe Left
-                    document.querySelector('.sidebar').classList.add('collapsed');
+                    sidebar.classList.add('collapsed');
+                    toggleBtn.classList.add('collapsed');
+                    toggleBtn.innerHTML = '›';
                 }
             }
         }
@@ -2275,6 +2282,8 @@
                 // On mobile, close sidebar after click
                 if (window.innerWidth <= 768) {
                     document.querySelector('.sidebar').classList.add('collapsed');
+                    document.querySelector('.sidebar-toggle-btn').classList.add('collapsed');
+                    document.querySelector('.sidebar-toggle-btn').innerHTML = '›';
                 }
             });
         });
@@ -2340,6 +2349,7 @@
         // Initialize sidebar state based on screen size
         if (window.innerWidth <= 768) {
             document.querySelector('.sidebar').classList.add('collapsed');
+            document.querySelector('.sidebar-toggle-btn').classList.add('collapsed');
             document.querySelector('.sidebar-toggle-btn').innerHTML = '›';
         }
     </script>
